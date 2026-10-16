@@ -29,6 +29,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dina-valisoa.me"),
   title: {
     default: "Dina Valisoa RANDRIAMIFIDY — Fullstack Developer & AI Engineer",
     template: "%s | Dina Valisoa RANDRIAMIFIDY",

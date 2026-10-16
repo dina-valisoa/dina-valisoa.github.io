@@ -1,12 +1,12 @@
 "use client";
+import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
 import { motion } from "motion/react";
-import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { serverAction } from "@/actions/server-action";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -42,20 +42,22 @@ export function ContactForm() {
       agree: false,
     } as unknown as Schema,
   });
-  const formAction = useAction(serverAction, {
-    onSuccess: () => {
-      // TODO: show success message
-      form.reset();
-    },
-    onError: () => {
-      // TODO: show error message
-    },
-  });
-  const handleSubmit = form.handleSubmit(async (data: Schema) => {
-    formAction.execute(data);
+  const [hasSucceeded, setHasSucceeded] = useState(false);
+  // Static hosting has no server, so hand the message to the visitor's mail client.
+  const handleSubmit = form.handleSubmit((data: Schema) => {
+    const signature = [
+      `${data.name} <${data.email}>`,
+      data.company && `Company: ${data.company}`,
+      data.employees && `Employees: ${data.employees}`,
+    ].filter(Boolean);
+    const body = [data.message, "", ...signature].join("\n");
+    window.location.href = `mailto:randriamifydina@gmail.com?subject=${encodeURIComponent(
+      `Contact from ${data.name}`,
+    )}&body=${encodeURIComponent(body)}`;
+    form.reset();
+    setHasSucceeded(true);
   });
 
-  const { isExecuting, hasSucceeded } = formAction;
   if (hasSucceeded) {
     return (
       <div className="w-full gap-2 rounded-md border p-2 sm:p-5 md:p-8">
@@ -242,7 +244,7 @@ export function ContactForm() {
         />
         <div className="flex w-full items-center justify-end pt-3">
           <Button className="rounded-lg" size="sm">
-            {isExecuting ? "Submitting..." : "Submit"}
+            Submit
           </Button>
         </div>
       </form>
