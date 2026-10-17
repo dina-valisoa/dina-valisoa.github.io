@@ -3,17 +3,19 @@
 import { useState } from "react";
 
 import { ArrowUpRight } from "lucide-react";
-import Marquee from "react-fast-marquee";
 
-import { projects } from "./projects";
+import { type Lang, tr } from "./lang";
+import { getProjects } from "./projects";
 
 import { cn } from "@/lib/utils";
 
 const filters = ["All", "FinTech", "AI", "ERP", "Tools"];
 
-export function Work() {
+export function Work({ lang }: { lang: Lang }) {
+  const t = tr(lang);
+  const label = (f: string) => (f === "All" ? t("All", "Tous") : f === "Tools" ? t("Tools", "Outils") : f === "AI" ? t("AI", "IA") : f);
   const [active, setActive] = useState("All");
-  const shown = projects.filter((p) => active === "All" || p.category === active);
+  const shown = getProjects(lang).filter((p) => active === "All" || p.category === active);
 
   return (
     <>
@@ -24,14 +26,12 @@ export function Work() {
             onClick={() => setActive(f)}
             className={cn("rounded-full px-4 py-2 text-sm transition-colors", active === f ? "bg-btn text-btn-fg" : "text-ink-2 hover:text-ink")}
           >
-            {f}
+            {label(f)}
           </button>
         ))}
       </div>
 
-      {/* Auto-scrolling row; pauses on hover. Edges fade out instead of cutting. */}
-      <div className="-mx-4 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] md:-mx-6">
-        <Marquee key={active} speed={35} pauseOnHover autoFill>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((p) => {
             const Card = p.href ? "a" : "div";
             const Icon = p.icon;
@@ -39,13 +39,13 @@ export function Work() {
               <Card
                 key={p.title}
                 {...(p.href && { href: p.href, target: "_blank", rel: "noopener noreferrer" })}
-                className="glass group mx-1.5 my-3 flex h-80 w-64 flex-col justify-between rounded-[22px] p-5 transition-transform duration-300 hover:-translate-y-1"
+                className="glass group flex flex-col gap-6 rounded-[22px] p-5 transition-transform duration-300 hover:-translate-y-0.5"
               >
                 <div className="flex items-start justify-between">
-                  <span className="grid size-12 place-items-center rounded-2xl bg-tile">
-                    <Icon className="size-6 text-blue-600 dark:text-blue-400" strokeWidth={1.5} />
+                  <span className="grid size-10 place-items-center rounded-xl bg-tile">
+                    <Icon className="size-5 text-blue-600 dark:text-blue-400" strokeWidth={1.5} />
                   </span>
-                  <span className="rounded-full border border-line px-2 py-0.5 text-[11px] text-ink-3">{p.category}</span>
+                  <span className="rounded-full border border-line px-2 py-0.5 text-[11px] text-ink-3">{label(p.category)}</span>
                 </div>
                 <div>
                   <div className="text-xs text-ink-3">{p.client}</div>
@@ -65,7 +65,6 @@ export function Work() {
               </Card>
             );
           })}
-        </Marquee>
       </div>
     </>
   );

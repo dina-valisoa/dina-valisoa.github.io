@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 export function Footer() {
   // Home has its own contact block
-  if (usePathname() === "/") return null;
+  if (["/", "/fr"].includes(usePathname())) return null;
 
   const navigation = [
     { name: "Services", href: "/#services" },

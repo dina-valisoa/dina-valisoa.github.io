@@ -26,7 +26,7 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   // Home has its own glass top bar
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname === "/fr") return null;
 
   return (
     <section

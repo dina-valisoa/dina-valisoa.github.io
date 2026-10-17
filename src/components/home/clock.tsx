@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-const fmt = new Intl.DateTimeFormat("en-US", {
+const opts: Intl.DateTimeFormatOptions = {
   timeZone: "Indian/Antananarivo",
   hour: "numeric",
   minute: "2-digit",
-});
+};
 
-export function Clock() {
+export function Clock({ locale = "en-US" }: { locale?: string }) {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -17,5 +17,5 @@ export function Clock() {
     return () => clearInterval(id);
   }, []);
 
-  return <span suppressHydrationWarning>{now ? fmt.format(now) : "--:--"}</span>;
+  return <span suppressHydrationWarning>{now ? now.toLocaleTimeString(locale, opts) : "--:--"}</span>;
 }

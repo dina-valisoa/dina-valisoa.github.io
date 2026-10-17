@@ -2,8 +2,12 @@
 
 import { ArrowRight } from "lucide-react";
 
+import { type Lang, tr } from "./lang";
+
 // ponytail: opens the visitor's mail client; swap for an API route if you want messages without it
-export function ContactForm({ email }: { email: string }) {
+export function ContactForm({ email, lang }: { email: string; lang: Lang }) {
+  const t = tr(lang);
+
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -18,19 +22,19 @@ export function ContactForm({ email }: { email: string }) {
   return (
     <form onSubmit={onSubmit} className="space-y-5">
       <label className="block text-sm text-ink-2">
-        Full name
-        <input name="name" required autoComplete="name" placeholder="Enter your full name" className={field} />
+        {t("Full name", "Nom complet")}
+        <input name="name" required autoComplete="name" placeholder={t("Enter your full name", "Entrez votre nom complet")} className={field} />
       </label>
       <label className="block text-sm text-ink-2">
-        Email address
-        <input name="from" type="email" required autoComplete="email" placeholder="Enter your email address" className={field} />
+        {t("Email address", "Adresse e-mail")}
+        <input name="from" type="email" required autoComplete="email" placeholder={t("Enter your email address", "Entrez votre adresse e-mail")} className={field} />
       </label>
       <label className="block text-sm text-ink-2">
         Message
-        <textarea name="message" required rows={5} placeholder="Tell me about your project" className={`${field} resize-none`} />
+        <textarea name="message" required rows={5} placeholder={t("Tell me about your project", "Parlez-moi de votre projet")} className={`${field} resize-none`} />
       </label>
       <button className="flex items-center gap-2 rounded-full bg-btn px-5 py-3 text-sm text-btn-fg transition-opacity hover:opacity-85">
-        Send message <ArrowRight className="size-4" />
+        {t("Send message", "Envoyer le message")} <ArrowRight className="size-4" />
       </button>
     </form>
   );
