@@ -52,3 +52,7 @@ portfolio-src5.tar.gz
 portfolio-src5.tar.gz
 portfolio-src6.tar.gz
 portfolio-src7.tar.gz
+
+# Cloudflare / OpenNext build output
+.open-next/
+.wrangler/
